@@ -29,10 +29,11 @@ describe User do
 
   it { should be_valid }
 
+
   describe "when name is not present" do
     before { @user.name = " " }
     it { should_not be_valid }
-  end
+   end
   
   describe "when name is too long" do
      before { @user.name = "a" * 51 }
@@ -65,24 +66,24 @@ describe User do
 
     describe "with valid password" do
        it { should == found_user.authenticate(@user.password) }
-     end
+   end
 
     describe "with invalid password" do
        let(:user_for_invalid_password) { found_user.authenticate("invalid") }
 
        it { should_not == user_for_invalid_password }
        specify { user_for_invalid_password.should be_false }
+    end
+    
+    describe "when email address is already taken" do
+        before do
+          @user.save
+          user_with_same_email = @user.dup
+          user_with_same_email.email = @user.email.upcase
+          user_with_same_email.save
      end
    
-    describe "when email address is already taken" do
-      before do
-        user_with_same_email = @user.dup
-        user_with_same_email.email = @user.email.upcase
-        user_with_same_email.save
+        # it { should_not be_valid }
     end
-
-      it { should_not be_valid }
-    end
-   
   end
 end
